@@ -1,0 +1,39 @@
+<Menu>:
+    loginButton: login
+    logoutButton: logout
+    responseButton: response
+    canvas.before:
+        Color:
+            rgba: 0, 133/255, 113/255, 0.52
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Button:
+        id: login
+        visible: True
+        text: u'Kirjaudu sis\u00e4\u00e4n'
+        size_hint_x: .5
+        size_hint_y: .3
+        opacity: 1
+        font_size: 30
+        pos_hint: {'center_x': 0.4, 'center_y': 0.5}
+        on_press: root.waitingResponse()
+    Button:
+        id: logout
+        visible: True
+        text: "Kirjaudu ulos"
+        size_hint_x: .5
+        size_hint_y: .3
+        opacity: 1
+        font_size: 30
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        on_press: root.waitingResponse()
+    Label:
+        id: response
+        visible: True
+        text: "Tunnistetaan..."
+        size_hint_x: 1
+        size_hint_y: .5
+        opacity: 1
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        font_size: 50
