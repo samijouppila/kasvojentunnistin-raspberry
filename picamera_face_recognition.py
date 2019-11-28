@@ -13,7 +13,8 @@ import time
 
 # construct the argument parser and parse the arguments
 
-#Initialize camera'
+#Initialize camera
+
 def startFaceRecognition():
 	camera = PiCamera()
 	rawCapture = PiRGBArray(camera)
