@@ -4,8 +4,8 @@ import io
 
 
 
-s = serial.Serial('COM4')
-
+#s = serial.Serial('COM4')
+s = serial.Serial('/dev/ttyACM0')
 
 
 def Lukija():
@@ -18,7 +18,7 @@ def Lukija():
                 
 
         if muutettuValue == 1:
-            
+            print("testi")
             return True
         
 
@@ -27,4 +27,4 @@ def Lukija():
 
 
 
-Lukija()
+#Lukija()

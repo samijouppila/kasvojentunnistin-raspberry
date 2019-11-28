@@ -12,6 +12,7 @@ from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 
 import picamera_face_recognition
+import hc04_lukija
 
 class Menu(BoxLayout):
     loginButton = ObjectProperty(None)
@@ -26,22 +27,26 @@ class Menu(BoxLayout):
         self.add_widget(self.loginButton)
         self.add_widget(self.logoutButton)
 
+    def waitForUserInput(self):
+        userrecognized = hc04_lukija.Lukija()
+        self.responseLabel.text = "Tunnistetaan..."
+        Clock.schedule_once(lambda dt: self.displayUserName(), 1)
+
     def displayUserName(self):
         #username = "käyttäjä"
         username = picamera_face_recognition.startFaceRecognition()
         self.responseLabel.text = "Käyttäjä tunnistettu:\n " + username
-        Clock.schedule_once(lambda dt: self.mainMenu(), 10)
+        Clock.schedule_once(lambda dt: self.mainMenu(), 5)
 
     def waitingResponse(self):
-        self.responseLabel.text = "Tunnistetaan..."
+        self.responseLabel.text = "Heilauta kädellä..."
         self.add_widget(self.responseLabel)
         self.remove_widget(self.loginButton)
         self.remove_widget(self.logoutButton)
-        Clock.schedule_once(lambda dt: self.displayUserName(), 1)
+        Clock.schedule_once(lambda dt: self.waitForUserInput(), 1)
 
 class FaceRecognitionApp(App):
     def build(self):
-        print("Täällä ollaan")
         Builder.load_file("face-recognition-gui.kv")
         app = Menu()
         app.initializeMenu()
