@@ -7,28 +7,37 @@ from kivy.clock import Clock
 
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 from kivy.core.window import Window
-Window.fullscreen = True
+#Window.fullscreen = True
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
+
+#import picamera_face_recognition
 
 class Menu(BoxLayout):
     loginButton = ObjectProperty(None)
     logoutButton = ObjectProperty(None)
-    responseButton = ObjectProperty(None)
+    responseLabel = ObjectProperty(None)
 
     def initializeMenu(self):
-        self.remove_widget(self.responseButton)
+        self.remove_widget(self.responseLabel)
 
     def mainMenu(self):
-        self.remove_widget(self.responseButton)
+        self.remove_widget(self.responseLabel)
         self.add_widget(self.loginButton)
         self.add_widget(self.logoutButton)
 
+    def displayUserName(self):
+        username = "käyttäjä"
+        #username = picamera_face_recognition.startFaceRecognition()
+        self.responseLabel.text = "Käyttäjä tunnistettu:\n " + username
+        Clock.schedule_once(lambda dt: self.mainMenu(), 4)
+
     def waitingResponse(self):
-        self.add_widget(self.responseButton)
+        self.responseLabel.text = "Tunnistetaan..."
+        self.add_widget(self.responseLabel)
         self.remove_widget(self.loginButton)
         self.remove_widget(self.logoutButton)
-        Clock.schedule_once(lambda dt: self.mainMenu(), 2)
+        Clock.schedule_once(lambda dt: self.displayUserName(), 4)
 
 class FaceRecognitionApp(App):
     def build(self):
