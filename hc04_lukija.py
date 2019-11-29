@@ -9,6 +9,10 @@ s = serial.Serial('/dev/ttyACM0')
 
 
 def Lukija():
+    if s.is_open:
+        s.close()
+        s.open()
+
     while True:
         #lukee sarjaporttia ja antaa valuen        s = serial.Serial('COM4')
         res = s.read()

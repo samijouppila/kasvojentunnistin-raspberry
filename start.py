@@ -30,7 +30,7 @@ class Menu(BoxLayout):
     def waitForUserInput(self):
         userrecognized = hc04_lukija.Lukija()
         self.responseLabel.text = "Tunnistetaan..."
-        Clock.schedule_once(lambda dt: self.displayUserName(), 1)
+        Clock.schedule_once(lambda dt: self.displayUserName(), 0.5)
 
     def displayUserName(self):
         #username = "käyttäjä"
@@ -43,7 +43,7 @@ class Menu(BoxLayout):
         self.add_widget(self.responseLabel)
         self.remove_widget(self.loginButton)
         self.remove_widget(self.logoutButton)
-        Clock.schedule_once(lambda dt: self.waitForUserInput(), 1)
+        Clock.schedule_once(lambda dt: self.waitForUserInput(), 0.5)
 
 class FaceRecognitionApp(App):
     def build(self):
