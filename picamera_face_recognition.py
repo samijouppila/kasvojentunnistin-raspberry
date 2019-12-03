@@ -15,7 +15,7 @@ import time
 
 #Initialize camera
 
-def startFaceRecognition():
+def recognizeUser():
 	camera = PiCamera()
 	rawCapture = PiRGBArray(camera)
 

@@ -17,7 +17,7 @@
         opacity: 1
         font_size: 30
         pos_hint: {'center_x': 0.4, 'center_y': 0.5}
-        on_press: root.waitingResponse()
+        on_press: root.startLogin()
     Button:
         id: logout
         visible: True
@@ -27,7 +27,7 @@
         opacity: 1
         font_size: 30
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-        on_press: root.waitingResponse()
+        on_press: root.startLogout()
     Label:
         id: response
         visible: True
@@ -36,4 +36,4 @@
         size_hint_y: .5
         opacity: 1
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-        font_size: 50
+        font_size: 36

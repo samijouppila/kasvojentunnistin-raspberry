@@ -18,6 +18,7 @@ class Menu(BoxLayout):
     loginButton = ObjectProperty(None)
     logoutButton = ObjectProperty(None)
     responseLabel = ObjectProperty(None)
+    actionStatus = ""
 
     def initializeMenu(self):
         self.remove_widget(self.responseLabel)
@@ -34,8 +35,14 @@ class Menu(BoxLayout):
 
     def displayUserName(self):
         #username = "käyttäjä"
-        username = picamera_face_recognition.startFaceRecognition()
-        self.responseLabel.text = "Käyttäjä tunnistettu:\n " + username
+        username = picamera_face_recognition.recognizeUser()
+        if username == "Tunnistamaton käyttäjä":
+            self.responseLabel.text = "Käyttäjää ei tunnistettu. \nKirjautuminen ei onnistunut."
+        else:
+            if self.actionStatus == "login":
+                self.responseLabel.text = "Käyttäjä tunnistettu: " + username + "\nSisäänkirjautuminen kirjattu."
+            else:
+                self.responseLabel.text = "Käyttäjä tunnistettu: " + username + "\nUloskirjautuminen kirjattu."
         Clock.schedule_once(lambda dt: self.mainMenu(), 5)
 
     def waitingResponse(self):
@@ -44,6 +51,14 @@ class Menu(BoxLayout):
         self.remove_widget(self.loginButton)
         self.remove_widget(self.logoutButton)
         Clock.schedule_once(lambda dt: self.waitForUserInput(), 0.5)
+
+    def startLogin(self):
+        self.actionStatus = "login"
+        self.waitingResponse()
+
+    def startLogout(self):
+        self.actionStatus = "logout"
+        self.waitingResponse()
 
 class FaceRecognitionApp(App):
     def build(self):
