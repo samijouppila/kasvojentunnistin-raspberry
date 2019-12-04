@@ -13,6 +13,8 @@ from kivy.uix.boxlayout import BoxLayout
 
 import picamera_face_recognition
 import hc04_lukija
+import upload_to_dropbox
+
 
 class Menu(BoxLayout):
     loginButton = ObjectProperty(None)
@@ -28,22 +30,30 @@ class Menu(BoxLayout):
         self.add_widget(self.loginButton)
         self.add_widget(self.logoutButton)
 
-    def waitForUserInput(self):
-        userrecognized = hc04_lukija.Lukija()
-        self.responseLabel.text = "Tunnistetaan..."
-        Clock.schedule_once(lambda dt: self.displayUserName(), 0.5)
+    def uploadToDropbox(self, username):
+        upload_to_dropbox.startDropboxUpload()
+        if username == "Tunnistamaton käyttäjä":
+            self.responseLabel.text = "Kirjautuminen ei onnistunut."
+        else:
+            if self.actionStatus == "login":
+                self.responseLabel.text = "Sisäänkirjautuminen kirjattu."
+            else:
+                self.responseLabel.text = "Uloskirjautuminen kirjattu."
+        Clock.schedule_once(lambda dt: self.mainMenu(), 5)
 
     def displayUserName(self):
         #username = "käyttäjä"
         username = picamera_face_recognition.recognizeUser()
         if username == "Tunnistamaton käyttäjä":
-            self.responseLabel.text = "Käyttäjää ei tunnistettu. \nKirjautuminen ei onnistunut."
+            self.responseLabel.text = "Käyttäjää ei tunnistettu."
         else:
-            if self.actionStatus == "login":
-                self.responseLabel.text = "Käyttäjä tunnistettu: " + username + "\nSisäänkirjautuminen kirjattu."
-            else:
-                self.responseLabel.text = "Käyttäjä tunnistettu: " + username + "\nUloskirjautuminen kirjattu."
-        Clock.schedule_once(lambda dt: self.mainMenu(), 5)
+            self.responseLabel.text = "Käyttäjä tunnistettu: " + username
+        Clock.schedule_once(lambda dt: self.uploadToDropbox(username), 0.5)
+
+    def waitForUserInput(self):
+        userrecognized = hc04_lukija.Lukija()
+        self.responseLabel.text = "Tunnistetaan..."
+        Clock.schedule_once(lambda dt: self.displayUserName(), 0.5)
 
     def waitingResponse(self):
         self.responseLabel.text = "Heilauta kädellä..."

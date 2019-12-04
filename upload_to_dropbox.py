@@ -1,15 +1,19 @@
 import sys
 import dropbox
+import pickle
 
 from dropbox.files import WriteMode
 from dropbox.exceptions import ApiError, AuthError
 
 # Access token
-TOKEN = 'er1m8laSd0AAAAAAAAAADwA2iVQeqh8ZzJmmfgxEqwz3AXU384idXMr7O60mER47'
+tokenFile = open("TOKEN.dat", "rb")
+TOKEN = pickle.load(tokenFile)
+tokenFile.close()
 
-LOCALFILE = 'C:\courses\kasv(pc)\kasvojentunnistin-PC\image.jpg'
-BACKUPPATH = '/kasvojentunnistus-api.jpg' # Keep the forward slash before destination filename
+LOCALFILE = 'images/kuva0001.jpg'
+BACKUPPATH = '/kuva0001.jpg'# Keep the forward slash before destination filename
 
+dbx = dropbox.Dropbox(TOKEN)
 
 # Uploads contents of LOCALFILE to Dropbox
 def backup():
@@ -42,14 +46,13 @@ def checkFileDetails():
 
 
 # Run this script independently
-if __name__ == '__main__':
+def startDropboxUpload():
     # Check for an access token
     if (len(TOKEN) == 0):
         sys.exit("ERROR: Looks like you didn't add your access token. Open up backup-and-restore-example.py in a text editor and paste in your token in line 14.")
 
     # Create an instance of a Dropbox class, which can make requests to the API.
     print("Creating a Dropbox object...")
-    dbx = dropbox.Dropbox(TOKEN)
 
     # Check that the access token is valid
     try:
