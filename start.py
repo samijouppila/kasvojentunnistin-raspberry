@@ -11,9 +11,11 @@ from kivy.core.window import Window
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 
+import datetime
 import picamera_face_recognition
 import hc04_lukija
 import upload_to_dropbox
+import database_request
 
 
 class Menu(BoxLayout):
@@ -30,16 +32,24 @@ class Menu(BoxLayout):
         self.add_widget(self.loginButton)
         self.add_widget(self.logoutButton)
 
-    def uploadToDropbox(self, username):
-        upload_to_dropbox.startDropboxUpload()
+    def sendEventToDatabase(self, username):
+        now = datetime.datetime.now()
         if username == "Tunnistamaton käyttäjä":
+            database_request.sendNewReport(username, "ei tunnistettu", str(now), "kuva10.jpg")
             self.responseLabel.text = "Kirjautuminen ei onnistunut."
         else:
             if self.actionStatus == "login":
                 self.responseLabel.text = "Sisäänkirjautuminen kirjattu."
+                database_request.sendNewReport(username, "sisään", str(now), "kuva10.jpg")
             else:
                 self.responseLabel.text = "Uloskirjautuminen kirjattu."
-        Clock.schedule_once(lambda dt: self.mainMenu(), 5)
+                database_request.sendNewReport(username, "ulos", str(now), "kuva10.jpg")
+
+    def uploadToDropbox(self, username):
+        upload_to_dropbox.startDropboxUpload()
+        Clock.schedule_once(lambda dt: self.sendEventToDatabase(), 0.5)
+
+
 
     def displayUserName(self):
         #username = "käyttäjä"
