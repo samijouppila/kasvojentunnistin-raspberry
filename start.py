@@ -7,7 +7,7 @@ from kivy.clock import Clock
 
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 from kivy.core.window import Window
-#Window.fullscreen = True
+Window.fullscreen = True
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 
