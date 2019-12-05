@@ -15,7 +15,7 @@ import time
 
 #Initialize camera
 
-def recognizeUser():
+def recognizeUser(fileName):
 	camera = PiCamera()
 	rawCapture = PiRGBArray(camera)
 
@@ -89,9 +89,11 @@ def recognizeUser():
 	if len(names) > 0:
 		username = names[0]
 		im = Image.fromarray(rgb)
-		im.save("images/kuva0001.jpg", "JPEG")
+		savepath = "images/" + fileName
+		im.save(savepath, "JPEG")
 		return username
 	else:
 		im = Image.fromarray(rgb)
-		im.save("images/kuva0001.jpg", "JPEG")
+		savepath = "images/" + fileName
+		im.save(savepath, "JPEG")
 		return "Tunnistamaton käyttäjä"

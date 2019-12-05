@@ -23,9 +23,13 @@ class Menu(BoxLayout):
     logoutButton = ObjectProperty(None)
     responseLabel = ObjectProperty(None)
     actionStatus = ""
+    currentImageName = ""
 
     def initializeMenu(self):
         self.remove_widget(self.responseLabel)
+
+    def nextImageIndex(self):
+        return database_request.receiveLatestIndex() + 1
 
     def mainMenu(self):
         self.remove_widget(self.responseLabel)
@@ -35,25 +39,26 @@ class Menu(BoxLayout):
     def sendEventToDatabase(self, username):
         now = datetime.datetime.now()
         if username == "Tunnistamaton käyttäjä":
-            database_request.sendNewReport(username, "ei tunnistettu", str(now), "kuva10.jpg")
+            database_request.sendNewReport(username, "ei tunnistettu", str(now), self.currentImageName)
             self.responseLabel.text = "Kirjautuminen ei onnistunut."
         else:
             if self.actionStatus == "login":
                 self.responseLabel.text = "Sisäänkirjautuminen kirjattu."
-                database_request.sendNewReport(username, "sisään", str(now), "kuva10.jpg")
+                database_request.sendNewReport(username, "sisään", str(now), self.currentImageName)
             else:
                 self.responseLabel.text = "Uloskirjautuminen kirjattu."
-                database_request.sendNewReport(username, "ulos", str(now), "kuva10.jpg")
+                database_request.sendNewReport(username, "ulos", str(now), self.currentImageName)
+        Clock.schedule_once(lambda dt: self.mainMenu(), 5)
 
     def uploadToDropbox(self, username):
-        upload_to_dropbox.startDropboxUpload()
-        Clock.schedule_once(lambda dt: self.sendEventToDatabase(), 0.5)
-
+        upload_to_dropbox.startDropboxUpload(self.currentImageName)
+        Clock.schedule_once(lambda dt: self.sendEventToDatabase(username), 0.5)
 
 
     def displayUserName(self):
         #username = "käyttäjä"
-        username = picamera_face_recognition.recognizeUser()
+        self.currentImageName = "kuva" + str(self.nextImageIndex()) + ".jpg"
+        username = picamera_face_recognition.recognizeUser(self.currentImageName)
         if username == "Tunnistamaton käyttäjä":
             self.responseLabel.text = "Käyttäjää ei tunnistettu."
         else:

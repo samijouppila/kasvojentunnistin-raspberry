@@ -10,13 +10,11 @@ tokenFile = open("TOKEN.dat", "rb")
 TOKEN = pickle.load(tokenFile)
 tokenFile.close()
 
-LOCALFILE = 'images/kuva0001.jpg'
-BACKUPPATH = '/kuva0001.jpg'# Keep the forward slash before destination filename
 
 dbx = dropbox.Dropbox(TOKEN)
 
 # Uploads contents of LOCALFILE to Dropbox
-def backup():
+def backup(LOCALFILE, BACKUPPATH):
     with open(LOCALFILE, 'rb') as f:
         # We use WriteMode=overwrite to make sure that the settings in the file
         # are changed on upload
@@ -46,8 +44,13 @@ def checkFileDetails():
 
 
 # Run this script independently
-def startDropboxUpload():
+def startDropboxUpload(fileName):
     # Check for an access token
+
+
+    LOCALFILE = "images/" + fileName
+    BACKUPPATH = '/' + fileName  # Keep the forward slash before destination filename
+
     if (len(TOKEN) == 0):
         sys.exit("ERROR: Looks like you didn't add your access token. Open up backup-and-restore-example.py in a text editor and paste in your token in line 14.")
 
@@ -68,6 +71,6 @@ def startDropboxUpload():
 
     print("Creating backup...")
     # Create a backup of the current settings file
-    backup()
+    backup(LOCALFILE, BACKUPPATH)
 
     print("Done!")
